@@ -12,6 +12,9 @@ const formAdd = popupAdd.querySelector('.popup__block_card_add');
 const cardNameInput = popupAdd.querySelector('.popup__input_card_name');
 const cardLinkInput = popupAdd.querySelector('.popup__input_card_link');
 
+const popupImage = document.querySelector('.popup_cover');
+const closePopupImageButton = popupImage.querySelector('.popup__close_cover')
+
 const nameProfile = document.querySelector('.profile__name');
 const jobProfile = document.querySelector('.profile__position');
 const cardTemplate = document.querySelector('#card-template').content;
@@ -54,6 +57,13 @@ function openPopupAdd() {
   popupAdd.classList.add('popup_opened');
 }
 
+const openPopupImage = (evt) => {
+  const popupElement = evt.target.closest('.card');
+  document.querySelector('.popup__image').src = popupElement.querySelector('.card__photo').src;
+  document.querySelector('.popup__caption').textContent = popupElement.querySelector('.card__name').textContent;
+  popupImage.classList.add('popup_opened');
+}
+
 const addCard = (card) => {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
 
@@ -65,6 +75,9 @@ const addCard = (card) => {
 
   const likeCardButton = cardElement.querySelector('#button__like');
   likeCardButton.addEventListener('click', likeCardHandler);
+
+  const openImage = cardElement.querySelector('.card__photo');
+  openImage.addEventListener('click', openPopupImage);
 
   return cardElement;
 };
@@ -99,8 +112,7 @@ function formSubmitHandlerEdit (evt) {
 function formSubmitHandlerAdd (evt) {
   evt.preventDefault();
   createCard({name: cardNameInput.value, link: cardLinkInput.value});
-  cardNameInput.value = '';
-  cardLinkInput.value = '';
+  formAdd.reset();
   closePopup(evt);
 }
 
@@ -108,5 +120,6 @@ openPopupEditButton.addEventListener('click', openPopupEdit);
 closePopupEditButton.addEventListener('click', closePopup);
 openPopupAddButton.addEventListener('click', openPopupAdd);
 closePopupAddButton.addEventListener('click', closePopup);
+closePopupImageButton.addEventListener('click', closePopup);
 formEdit.addEventListener('submit', formSubmitHandlerEdit);
 formAdd.addEventListener('submit', formSubmitHandlerAdd);
