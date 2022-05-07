@@ -12,7 +12,3 @@
 .card__button:hover {
   opacity: .5;
 }
-
-.card__button:active {
-  background-image: url("../../../images/card__reaction_active.svg");
-}
