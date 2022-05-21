@@ -14,6 +14,6 @@
 
 @media screen and (max-width: 529px) {
   .popup__error {
-    width: 100%
+    width: 100%;
   }
 }
