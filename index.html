@@ -38,10 +38,16 @@
     <div class="popup__container">
       <button class="popup__close" type="button"  aria-label="Закрыть попап"></button>
         <h2 class="popup__title">Редактировать профиль</h2>
-        <form class="popup__block popup__block_profile_edit" name="edit profile"> 
-          <input class="popup__input popup__input_content_name" type="text" name="name" placeholder="Имя">
-          <input class="popup__input popup__input_content_job" type="text" name="job" placeholder="Профессия">
-          <button class="popup__save" type="submit" aria-label="Сохранить">Сохранить</button>
+        <form class="popup__form popup__block popup__block_profile_edit" name="edit profile" novalidate> 
+          <div class="form__container">
+            <input id="name-input" class="form__input popup__input popup__input_content_name" type="text" name="name" placeholder="Имя" minlength="2" maxlength="40" required>
+            <span class="popup__error name-input-error"></span>
+          </div>
+          <div class="form__container">
+            <input id="job-input" class="form__input popup__input popup__input_content_job" type="text" name="job" placeholder="Профессия" minlength="2" maxlength="200"  required>
+            <span class="popup__error job-input-error"></span>
+          </div>
+          <button class="popup__button popup__save" type="submit" aria-label="Сохранить">Сохранить</button>
         </form>
     </div>
   </div>
@@ -50,10 +56,16 @@
     <div class="popup__container">
       <button class="popup__close popup__close_add" type="button"  aria-label="Закрыть попап"></button>
         <h2 class="popup__title">Новое место</h2>
-        <form class="popup__block popup__block_card_add" name="edit profile"> 
-          <input class="popup__input popup__input_card_name" type="text" name="name" placeholder="Название">
-          <input class="popup__input popup__input_card_link" type="text" name="job" placeholder="Ссылка на картинку">
-          <button class="popup__save" type="submit" aria-label="Сохранить">Сохранить</button>
+        <form class="popup__form popup__block popup__block_card_add" name="edit profile" novalidate> 
+          <div class="form__container">
+            <input id="card_name-input" class="form__input popup__input popup__input_card_name " type="text" name="card_name" placeholder="Название" minlength="2" maxlength="30" required>
+            <span class="popup__error card_name-input-error"></span>
+          </div>
+          <div class="form__container">
+            <input id="card_link-input" class="form__input popup__input popup__input_card_link" type="url" name="card_link" placeholder="Ссылка на картинку"  required>
+            <span class="popup__error card_link-input-error"></span>
+          </div>
+          <button class="popup__button popup__save" type="submit" aria-label="Сохранить">Сохранить</button>
         </form>
     </div>
   </div>
@@ -76,6 +88,8 @@
       </div>
     </article>
   </template>
+  <script src="./scripts/cards.js"></script>
+  <script src="./scripts/validate.js"></script>
   <script src="./scripts/index.js"></script>
 </body>
 </html>
