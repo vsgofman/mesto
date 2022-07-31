@@ -88,7 +88,6 @@ const createCard = (card) => {
 
   const imageOpen = cardElement.querySelector('.card__photo');
   imageOpen.addEventListener('click', () => openPopupImage(card));
-
   return cardElement;
 };
 
