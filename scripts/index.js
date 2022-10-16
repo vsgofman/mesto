@@ -33,10 +33,9 @@ const enableValidationObject = {
 };
 
 const formPopupEditValidator = new FormValidator(enableValidationObject, formPopupEdit, popupEdit);
-console.log(formPopupEditValidator);
-const enableformPopupEditValidator = formPopupEditValidator.enableValidation();
+formPopupEditValidator.enableValidation();
 const formPopupAddValidator = new FormValidator(enableValidationObject, formAdd, popupAdd);
-const enableformAddValidator = formPopupAddValidator.enableValidation();
+formPopupAddValidator.enableValidation();
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
