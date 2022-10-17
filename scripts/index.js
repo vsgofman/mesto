@@ -50,7 +50,7 @@ function openPopupEdit() {
 }
 
 function openPopupAdd() {
-  popupAdd.querySelector('.popup__form').reset();
+  formAdd.reset();
   formPopupAddValidator.checkPopupBeforeOpen();
   openPopup(popupAdd);
 }
@@ -75,9 +75,8 @@ function closePopupEsc(evt) {
 
 const createCard = (item) => {
   const card = new Card(item);
-  console.log(card);
   const cardElement = card.generateCard();
-  addCard(cardElement);
+  return cardElement;
 };
 
 const addCard = (card) => {
@@ -93,16 +92,12 @@ function handleProfileFormEditSubmit (evt) {
 
 function handleProfileFormAddSubmit (evt) {
   evt.preventDefault();
-  createCard({name: cardNameInput.value, link: cardLinkInput.value});
+  addCard(createCard({name: cardNameInput.value, link: cardLinkInput.value}));
   closePopup(popupAdd);
   formAdd.reset();
 }
 
 const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
   {
     name: 'Челябинская область',
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
@@ -122,11 +117,15 @@ const initialCards = [
   {
     name: 'Байкал',
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  },
+  {
+    name: 'Челябинск',
+    link: 'https://static.ngs.ru/news/99/preview/84ef7324e374241f460a943ae263e53000d87c25_599_399_c.jpg'
   }
 ];
 
 initialCards.forEach((item) => {
-  createCard(item);
+  addCard(createCard(item));
 });
 
 popupList.forEach (popup => {
