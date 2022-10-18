@@ -74,7 +74,7 @@ function closePopupEsc(evt) {
 }
 
 const createCard = (item) => {
-  const card = new Card(item);
+  const card = new Card(item, cardTemplate);
   const cardElement = card.generateCard();
   return cardElement;
 };
@@ -138,4 +138,4 @@ buttonPopupAddOpen.addEventListener('click', openPopupAdd);
 formPopupEdit.addEventListener('submit', handleProfileFormEditSubmit);
 formAdd.addEventListener('submit', handleProfileFormAddSubmit);
 
-export { cardTemplate, cardImage, cardTitle, openPopup, popupImage };
+export { cardImage, cardTitle, openPopup, popupImage };

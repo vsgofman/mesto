@@ -1,12 +1,13 @@
-import { cardTemplate, cardImage, cardTitle, openPopup, popupImage } from './index.js';
+import { cardImage, cardTitle, openPopup, popupImage } from './index.js';
 export default class Card {
-  constructor(data) {
+  constructor(data, cardTemplate) {
     this._title = data.name;
     this._photo = data.link;
+    this._cardTemplate = cardTemplate;
   }
 
   _getTemplate() {
-    const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+    const cardElement = this._cardTemplate.querySelector('.card').cloneNode(true);
     return cardElement;
   }
 
