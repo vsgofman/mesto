@@ -3,21 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="pages/index.css">
-  <meta name="description" content="Четвертая проектная работа курса веб-разработки">
-  <meta name="keywords" content="HTML5, CSS, БЭМ, JS">
+  <meta name="description" content="Восьмая проектная работа курса веб-разработки">
+  <meta name="keywords" content="HTML5, CSS, БЭМ, JS, ООП">
   <meta name="author" content="Виктор Гофман">
   <title>Mesto</title>
 </head>
 <body class="page">
   <div class="page__container">
     <header class="header">
-      <img class="header__logo" src="images/header-logo.svg" alt="логотип">
+      <img class="header__logo" src="<%=require('./images/header-logo.svg')%>" alt="логотип">
     </header>
     <main class="content">
       <section class="profile content__profile">
         <div class="profile__block">
-          <img class="profile__photo" src="images/cousteau.jpg" alt="Аватар пользователя">
+          <img class="profile__photo" src="<%=require('./images/cousteau.jpg')%>" alt="Аватар пользователя">
           <div class="profile__edit">
             <div class="info profile__info">
               <h1 class="profile__name">Жак-Ив Кусто</h1>
@@ -88,8 +87,5 @@
       </div>
     </article>
   </template>
-  <script type="module" src="./scripts/index.js"></script>
-  <script type="module" src="./scripts/Card.js"></script>
-  <script type="module" src="./scripts/FormValidator.js"></script>
 </body>
 </html>
