@@ -8,11 +8,11 @@ export default class PopupWithForm extends Popup {
   }
 
   _getInputValues() {
-    const inputValueObject = {};
+    const inputValues = {};
     this._inputList.forEach((input, i) => {
-      inputValueObject[`input${i+1}`] = input.value;
+      inputValues[input.id] = input.value;
     });
-    return inputValueObject;
+    return inputValues;
   }
 
   setEventListeners() {

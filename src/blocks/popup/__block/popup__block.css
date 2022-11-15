@@ -2,6 +2,6 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   padding: 24px 0 0 0;
 }
