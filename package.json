@@ -1,11 +1,14 @@
 {
   "name": "mesto",
+  "homepage": "https://vsgofman.github.io/mesto",
   "version": "0.0.1",
   "description": "1. Сервис Mesto\r 2. Проектная работа по созданию интерактивной страницы с возможностью добавления и удаления фотографий из путешествий.\r 3. В работе используется адаптивная верстка, макет с десктопной и мобильной версиями сайта, знания JavaScipt. Реализованы функции открытия/закрытия всплывающего окна, изменения данных профиля, добавления новой карточки, просмотра изображения в увеличенном размере, валидации на стороне пользователя. Часть функционала создана с использованием парадигмы ООП. Ссылка на проект: https://vsgofman.github.io/mesto/",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
-    "dev": "webpack serve"
+    "dev": "webpack serve",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "repository": {
     "type": "git",
@@ -25,6 +28,7 @@
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.7.2",
     "cssnano": "^5.1.14",
+    "gh-pages": "^4.0.0",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.6.1",
     "postcss-loader": "^7.0.1",
