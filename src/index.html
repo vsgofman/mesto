@@ -55,7 +55,7 @@
     <div class="popup__container">
       <button class="popup__close popup__close_add" type="button"  aria-label="Закрыть попап"></button>
         <h2 class="popup__title">Новое место</h2>
-        <form class="form popup__form popup__block popup__block_card_add" name="edit profile" novalidate>
+        <form class="form popup__form popup__block popup__block_card_add" name="add card" novalidate>
           <div class="form__container">
             <input id="card-name" class="popup__input popup__input_card_name" type="text" name="card_name" placeholder="Название" minlength="2" maxlength="30" required>
             <span class="popup__error popup__error_card-name"></span>
@@ -64,10 +64,32 @@
             <input id="card-link" class="form__input popup__input popup__input_card_link" type="url" name="card_link" placeholder="Ссылка на картинку"  required>
             <span class="popup__error popup__error_card-link"></span>
           </div>
+          <button class="popup__button popup__save" type="submit" aria-label="Сохранить">Создать</button>
+        </form>
+    </div>
+  </div><!--/.popup_add-->
+
+  <div class="popup popup_avatar">
+    <div class="popup__container">
+      <button class="popup__close popup__close_add" type="button"  aria-label="Закрыть попап"></button>
+        <h2 class="popup__title">Обновить аватар</h2>
+        <form class="form popup__form popup__block popup__block_card_add" name="edit profile" novalidate>
+          <div class="form__container">
+            <input id="avatar-link" class="form__input popup__input popup__input_avatar_link" type="url" name="avatar_link" placeholder="Ссылка на картинку"  required>
+            <span class="popup__error popup__error_avatar-link"></span>
+          </div>
           <button class="popup__button popup__save" type="submit" aria-label="Сохранить">Сохранить</button>
         </form>
     </div>
-  </div>
+  </div><!--/.popup_avatar-->
+
+  <div class="popup popup_confirm">
+    <div class="popup__container">
+      <button class="popup__close popup__close_add" type="button"  aria-label="Закрыть попап"></button>
+        <h2 class="popup__title">Вы уверены?</h2>
+        <button class="popup__button popup__save" type="submit" aria-label="Сохранить">Сохранить</button>
+    </div>
+  </div><!--/.popup_conrirm-->
 
   <div class="popup popup_cover">
     <div class="popup__container popup__container_cover">
@@ -83,7 +105,10 @@
       <button class="card__button_remove" id="button__remove" type="button" name="remove"></button>
       <div class="card__caption">
         <h2 class="card__name"></h2>
-        <button class="card__button" id="button__like" type="button"></button>
+        <div class="card__like">
+          <button class="card__button" id="button__like" type="button"></button>
+          <p class="card__amount">2</p>
+        </div>
       </div>
     </article>
   </template>

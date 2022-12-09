@@ -1,4 +1,5 @@
-import { initialCards } from '../utils/constants.js'
+import { initialCards } from '../utils/constants.js';
+import Api from '../components/Api.js';
 import Card from '../components/Card.js';
 import FormValidator from '../components/FormValidator.js';
 import Section from '../components/Section.js';
@@ -7,6 +8,7 @@ import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import UserInfo from '../components/UserInfo.js';
 import './index.css';
+// import { get } from 'core-js/core/dict';
 const popupEdit = document.querySelector('.popup_edit');
 const popupAdd = document.querySelector('.popup_add');
 const buttonPopupEditOpen = document.querySelector('.profile__button_edit');
@@ -103,3 +105,39 @@ popupAddCard.setEventListeners();
 popupImage.setEventListeners();
 buttonPopupEditOpen.addEventListener('click', handlePopupEditOpen);
 buttonPopupAddOpen.addEventListener('click', handlePopupAddOpen);
+
+fetch('https://mesto.nomoreparties.co/v1/cohort-54/cards', {
+  headers: {
+    authorization: '2ce6c808-d58b-4b11-aa87-9ee20a23a568'
+  }
+})
+  .then(res => {
+    return res.json();
+  })
+  .then((result) => {
+    console.log(result);
+  });
+
+fetch('https://nomoreparties.co/v1/cohort-54/users/me', {
+  headers: {
+    authorization: '2ce6c808-d58b-4b11-aa87-9ee20a23a568',
+    'content-type': 'application/json',
+  }
+})
+.then(res => {
+  return res.json();
+})
+.then((result) => {
+  console.log(result);
+});
+
+// пример функции для кнопки сохранения
+// function renderLoading(isLoading) {
+//   if(isLoading) {
+//     spinner.classList.add('spinner_visible');
+//     content.classList.add('content_hidden');
+//   } else {
+//     content.classList.remove('content_hidden');
+//     spinner.classList.remove('spinner_visible');
+//   }
+// }

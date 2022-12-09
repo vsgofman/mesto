@@ -1,5 +1,5 @@
 .card__name {
-  max-width: 224px;
+  max-width: 225px;
   margin: 0;
   font-size: 24px;
   font-weight: 900;
@@ -18,7 +18,7 @@
 
 @media screen and (max-width: 689px) {
   .card__name {
-    max-width: 224px;
+    max-width: 225px;
   }
 }
 
@@ -30,6 +30,6 @@
 
 @media screen and (max-width: 424px) {
   .card__name {
-    max-width: 224px;
+    max-width: 225px;
   }
 }
