@@ -8,7 +8,7 @@ import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import UserInfo from '../components/UserInfo.js';
 import './index.css';
-// import { get } from 'core-js/core/dict';
+
 const popupEdit = document.querySelector('.popup_edit');
 const popupAdd = document.querySelector('.popup_add');
 const buttonPopupEditOpen = document.querySelector('.profile__button_edit');
@@ -37,7 +37,7 @@ const defaultCardList = new Section({
     defaultCardList.addItem(createCard(cardItem));
   }
 }, cardContainerSelector);
-defaultCardList.renderItems();
+
 
 function handleCardClick(name, link) {
   popupImage.open(name, link);
@@ -106,30 +106,55 @@ popupImage.setEventListeners();
 buttonPopupEditOpen.addEventListener('click', handlePopupEditOpen);
 buttonPopupAddOpen.addEventListener('click', handlePopupAddOpen);
 
-fetch('https://mesto.nomoreparties.co/v1/cohort-54/cards', {
-  headers: {
-    authorization: '2ce6c808-d58b-4b11-aa87-9ee20a23a568'
-  }
-})
-  .then(res => {
-    return res.json();
-  })
-  .then((result) => {
-    console.log(result);
-  });
+// fetch('https://nomoreparties.co/v1/cohort-54/users/me', {
+//   headers: {
+//     authorization: '2ce6c808-d58b-4b11-aa87-9ee20a23a568',
+//     'content-type': 'application/json',
+//   }
+// })
+// .then(res => {
+//   return res.json();
+// })
+// .then((result) => {
+//   console.log(result);
+// });
 
-fetch('https://nomoreparties.co/v1/cohort-54/users/me', {
+//////////////////////////////////////////////////////////////
+
+const apiConfig = {
+  url: "https://mesto.nomoreparties.co/v1/cohort-54",
   headers: {
     authorization: '2ce6c808-d58b-4b11-aa87-9ee20a23a568',
-    'content-type': 'application/json',
-  }
-})
-.then(res => {
-  return res.json();
-})
+    'Content-Type': 'application/json'
+  },
+
+}
+
+
+const api = new Api(apiConfig);
+// api.getProfile();
+api.getInitialCards()
 .then((result) => {
-  console.log(result);
+    defaultCardList.renderItems(result);
+})
+.catch((error) => {
+  console.log(error)
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // пример функции для кнопки сохранения
 // function renderLoading(isLoading) {

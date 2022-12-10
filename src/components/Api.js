@@ -1,17 +1,39 @@
 export default class Api {
-  constructor() {
+  constructor({url, headers}) {
+    this._url = url;
+    this._headers = headers;
+  }
 
+  getProfile() {
+    fetch(`${this._url}/users/me`, {
+      headers: this._headers
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
+      Promise.reject(`Ошибка: ${res.status}`)
+    })
+    .catch(console.log)
   }
 
   getInitialCards() {
+    return fetch(`${this._url}/cards`, {
+      headers: this._headers,
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json()
+        }
+        return Promise.reject(`Ошибка: ${res.status} ${res.statusText}`);
+      });
+  }
+
+  deleteCard() {
+
+  }
+
+  addCard() {
 
   }
 }
-
-const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-54',
-  headers: {
-    authorization: '2ce6c808-d58b-4b11-aa87-9ee20a23a568',
-    'Content-Type': 'application/json'
-  }
-});
