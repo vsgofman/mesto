@@ -24,6 +24,35 @@ const formAdd = popupAdd.querySelector('.popup__block_card_add');
 const cardTemplate = document.querySelector('#card-template').content;
 const cardContainerSelector = '.cards';
 
+const apiConfig = {
+  url: "https://mesto.nomoreparties.co/v1/cohort-54",
+  headers: {
+    authorization: '2ce6c808-d58b-4b11-aa87-9ee20a23a568',
+    'Content-Type': 'application/json'
+  },
+}
+
+const api = new Api(apiConfig);
+api.getProfile()
+.then((res) => {
+  userInfo.setUserInfo(res.name, res.about);
+})
+
+api.getInitialCards()
+.then((result) => {
+  const defaultCardList = new Section({
+    items: result,
+    renderer: (cardItem) => {
+      defaultCardList.addItem(createCard(cardItem));
+    }
+  }, cardContainerSelector)
+  defaultCardList.renderItems()
+})
+.catch((error) => {
+  console.log(error)
+});
+
+
 // создание карточек
 const createCard = (item) => {
   const card = new Card(item, cardTemplate, handleCardClick);
@@ -31,12 +60,9 @@ const createCard = (item) => {
   return cardElement;
 };
 
-const defaultCardList = new Section({
-  items: initialCards,
-  renderer: (cardItem) => {
-    defaultCardList.addItem(createCard(cardItem));
-  }
-}, cardContainerSelector);
+
+// исправить функцию, удалить массив с начальными карточками!!!!!!!!!!!!!!!!
+
 
 
 function handleCardClick(name, link) {
@@ -45,9 +71,12 @@ function handleCardClick(name, link) {
 // попапы
 const popupEditProfile = new PopupWithForm({
   popupSelector: '.popup_edit',
-  submitFormCallback: (userData, evt) => {
+  submitFormCallback: (data , evt) => {
     evt.preventDefault();
-    userInfo.setUserInfo(userData);
+    api.editProfile(data['name-input'], data['job-input'])
+    .then(() => {
+      userInfo.setUserInfo(data['name-input'], data['job-input']);
+    })
     popupEditProfile.close();
   }
 });
@@ -56,17 +85,23 @@ const popupAddCard = new PopupWithForm({
   popupSelector: '.popup_add',
   submitFormCallback: (cardData, evt) => {
     evt.preventDefault();
-    const newCard = new Section({
-      items: [ cardData ],
-      renderer: (cardData) => {
-        const card = {};
-        card.name = cardData['card-name'];
-        card.link = cardData['card-link'];
-        newCard.addItem(createCard(card));
-      }
-    }, cardContainerSelector);
-    newCard.renderItems();
-    popupAddCard.close();
+    api.addCard(cardData['card-name'], cardData['card-link'])
+    .then((res) => {
+      const newCard = new Section({
+        items: [ res ],
+        renderer: (res) => {
+          console.log(res)
+          const card = {};
+          card.name = res.name;
+          card.link = res.link;
+          newCard.addItem(createCard(card))
+        }
+      }, cardContainerSelector);
+      newCard.renderItems();
+    })
+    .then(() => {
+      popupAddCard.close();
+    })
   }
 });
 
@@ -75,8 +110,8 @@ const userInfo = new UserInfo({ name: '.profile__name', job: '.profile__position
 
 const handlePopupEditOpen = () => {
   const data = userInfo.getUserInfo();
-  profileNameInput.value = data.userName;
-  profileJobInput.value = data.userJob;
+  profileNameInput.value = data.name;
+  profileJobInput.value = data.job;
   formPopupEditValidator.checkPopupBeforeOpen();
   popupEditProfile.open();
 };
@@ -121,25 +156,9 @@ buttonPopupAddOpen.addEventListener('click', handlePopupAddOpen);
 
 //////////////////////////////////////////////////////////////
 
-const apiConfig = {
-  url: "https://mesto.nomoreparties.co/v1/cohort-54",
-  headers: {
-    authorization: '2ce6c808-d58b-4b11-aa87-9ee20a23a568',
-    'Content-Type': 'application/json'
-  },
-
-}
 
 
-const api = new Api(apiConfig);
-// api.getProfile();
-api.getInitialCards()
-.then((result) => {
-    defaultCardList.renderItems(result);
-})
-.catch((error) => {
-  console.log(error)
-});
+
 
 
 

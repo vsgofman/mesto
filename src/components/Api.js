@@ -5,16 +5,32 @@ export default class Api {
   }
 
   getProfile() {
-    fetch(`${this._url}/users/me`, {
+    return fetch(`${this._url}/users/me`, {
       headers: this._headers
     })
     .then((res) => {
       if (res.ok) {
         return res.json()
       }
-      Promise.reject(`Ошибка: ${res.status}`)
+      return Promise.reject(`Ошибка: ${res.status}`)
+    }).catch(console.log)
+  }
+
+  editProfile(name, about) {
+    return fetch(`${this._url}/users/me`, {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({
+        name,
+        about
+      })
     })
-    .catch(console.log)
+    .then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
+      return Promise.reject(`Ошибка: ${res.status}`)
+    }).catch(console.log)
   }
 
   getInitialCards() {
@@ -29,11 +45,24 @@ export default class Api {
       });
   }
 
-  deleteCard() {
-
+  addCard(name, link) {
+    return fetch(`${this._url}/cards`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        name,
+        link
+      })
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
+      return Promise.reject(`Ошибка: ${res.status}`)
+    }).catch(console.log)
   }
 
-  addCard() {
+  deleteCard() {
 
   }
 }
