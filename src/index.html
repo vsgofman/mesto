@@ -33,6 +33,7 @@
       <p class="footer__copyright">&copy; 2021 Mesto Russia</p>
     </footer>
   </div><!--/.page__container-->
+
   <div class="popup popup_edit">
     <div class="popup__container">
       <button class="popup__close" type="button"  aria-label="Закрыть попап"></button>
@@ -87,7 +88,10 @@
     <div class="popup__container">
       <button class="popup__close popup__close_add" type="button"  aria-label="Закрыть попап"></button>
         <h2 class="popup__title">Вы уверены?</h2>
-        <button class="popup__button popup__save" type="submit" aria-label="Да">Да</button>
+        <form class="form popup__form popup__block" name="edit profile" novalidate>
+          <button class="popup__button popup__save" type="submit" aria-label="Да">Да</button>
+          <!--ИСПРАВИТЬ СТИЛИ КНОПКИ В ПОПАПЕ!!!!!!!!!!-->
+        </form>
     </div>
   </div><!--/.popup_conrirm-->
 
@@ -107,7 +111,7 @@
         <h2 class="card__name"></h2>
         <div class="card__like">
           <button class="card__button" id="button__like" type="button"></button>
-          <p class="card__amount">2</p>
+          <p class="card__amount"></p>
         </div>
       </div>
     </article>

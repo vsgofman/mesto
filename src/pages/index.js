@@ -40,6 +40,7 @@ api.getProfile()
 
 api.getInitialCards()
 .then((result) => {
+  console.log(result)
   const defaultCardList = new Section({
     items: result,
     renderer: (cardItem) => {
@@ -55,55 +56,55 @@ api.getInitialCards()
 
 // создание карточек
 const createCard = (item) => {
-  const card = new Card(item, cardTemplate, handleCardClick);
+  console.log('item', item);
+  const card = new Card(
+    item,
+    cardTemplate,
+    handleCardClick,
+    () => {
+      console.log('click button')
+      popupDeleteConfirm.open();
+    }
+    );
   const cardElement = card.generateCard();
   return cardElement;
 };
 
-
-// исправить функцию, удалить массив с начальными карточками!!!!!!!!!!!!!!!!
-
-
+// удалить массив с начальными карточками!!!!!!!!!!!!!!!!
 
 function handleCardClick(name, link) {
   popupImage.open(name, link);
 }
 // попапы
-const popupEditProfile = new PopupWithForm({
-  popupSelector: '.popup_edit',
-  submitFormCallback: (data , evt) => {
-    evt.preventDefault();
-    api.editProfile(data['name-input'], data['job-input'])
-    .then(() => {
-      userInfo.setUserInfo(data['name-input'], data['job-input']);
-    })
-    popupEditProfile.close();
-  }
+const popupEditProfile = new PopupWithForm(
+  '.popup_edit',
+  (data) => {
+  api.editProfile(data['name-input'], data['job-input'])
+  .then(() => {
+    userInfo.setUserInfo(data['name-input'], data['job-input']);
+  })
+  popupEditProfile.close();
 });
 
-const popupAddCard = new PopupWithForm({
-  popupSelector: '.popup_add',
-  submitFormCallback: (cardData, evt) => {
-    evt.preventDefault();
-    api.addCard(cardData['card-name'], cardData['card-link'])
-    .then((res) => {
-      const newCard = new Section({
-        items: [ res ],
-        renderer: (res) => {
-          console.log(res)
-          const card = {};
-          card.name = res.name;
-          card.link = res.link;
-          newCard.addItem(createCard(card))
-        }
-      }, cardContainerSelector);
-      newCard.renderItems();
-    })
-    .then(() => {
-      popupAddCard.close();
-    })
-  }
+const popupAddCard = new PopupWithForm('.popup_add', (cardData) => {
+  api.addCard(cardData['card-name'], cardData['card-link'])
+  .then((res) => {
+    const newCard = new Section({
+      items: [ res ],
+      renderer: (res) => {
+        newCard.addItem(createCard(res))
+      }
+    }, cardContainerSelector);
+    newCard.renderItems();
+  })
+  .then(() => {
+    popupAddCard.close();
+  })
 });
+
+const popupDeleteConfirm = new PopupWithForm('.popup_confirm', () => {
+  console.log('delete')
+})
 
 const popupImage = new PopupWithImage('.popup_cover');
 const userInfo = new UserInfo({ name: '.profile__name', job: '.profile__position' });
@@ -138,6 +139,7 @@ formPopupAddValidator.enableValidation();
 popupEditProfile.setEventListeners();
 popupAddCard.setEventListeners();
 popupImage.setEventListeners();
+popupDeleteConfirm.setEventListeners();
 buttonPopupEditOpen.addEventListener('click', handlePopupEditOpen);
 buttonPopupAddOpen.addEventListener('click', handlePopupAddOpen);
 
