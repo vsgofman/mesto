@@ -1,4 +1,3 @@
-import { initialCards } from '../utils/constants.js';
 import Api from '../components/Api.js';
 import Card from '../components/Card.js';
 import FormValidator from '../components/FormValidator.js';
@@ -20,9 +19,11 @@ const formPopupEdit = popupEdit.querySelector('.popup__block_profile_edit');
 const profileNameInput = popupEdit.querySelector('.popup__input_content_name');
 const profileJobInput = popupEdit.querySelector('.popup__input_content_job');
 const formAdd = popupAdd.querySelector('.popup__block_card_add');
+let userId = '';
 
 const cardTemplate = document.querySelector('#card-template').content;
 const cardContainerSelector = '.cards';
+
 
 const apiConfig = {
   url: "https://mesto.nomoreparties.co/v1/cohort-54",
@@ -35,12 +36,12 @@ const apiConfig = {
 const api = new Api(apiConfig);
 api.getProfile()
 .then((res) => {
-  userInfo.setUserInfo(res.name, res.about);
+  userInfo.setUserInfo(res.name, res.about)
+  userId = res._id
 })
 
 api.getInitialCards()
 .then((result) => {
-  console.log(result)
   const defaultCardList = new Section({
     items: result,
     renderer: (cardItem) => {
@@ -56,21 +57,30 @@ api.getInitialCards()
 
 // создание карточек
 const createCard = (item) => {
-  console.log('item', item);
   const card = new Card(
-    item,
+    { data: item, userId: userId },
     cardTemplate,
     handleCardClick,
-    () => {
-      console.log('click button')
+    (id) => {
       popupDeleteConfirm.open();
+      popupDeleteConfirm.changePopupCallback(() => {
+        api.deleteCard(id)
+        .then((res) => {
+          popupDeleteConfirm.close();
+          card.deleteCard();
+        })
+      })
+    },
+    (id) => {
+      api.addLike(id)
+      .then((res) => {
+        console.log(res)
+      })
     }
-    );
+  );
   const cardElement = card.generateCard();
   return cardElement;
 };
-
-// удалить массив с начальными карточками!!!!!!!!!!!!!!!!
 
 function handleCardClick(name, link) {
   popupImage.open(name, link);
@@ -95,16 +105,15 @@ const popupAddCard = new PopupWithForm('.popup_add', (cardData) => {
         newCard.addItem(createCard(res))
       }
     }, cardContainerSelector);
-    newCard.renderItems();
+    newCard.renderItems()
   })
   .then(() => {
-    popupAddCard.close();
+    popupAddCard.close()
   })
 });
 
-const popupDeleteConfirm = new PopupWithForm('.popup_confirm', () => {
-  console.log('delete')
-})
+
+const popupDeleteConfirm = new PopupWithForm('.popup_confirm')
 
 const popupImage = new PopupWithImage('.popup_cover');
 const userInfo = new UserInfo({ name: '.profile__name', job: '.profile__position' });
@@ -142,40 +151,6 @@ popupImage.setEventListeners();
 popupDeleteConfirm.setEventListeners();
 buttonPopupEditOpen.addEventListener('click', handlePopupEditOpen);
 buttonPopupAddOpen.addEventListener('click', handlePopupAddOpen);
-
-// fetch('https://nomoreparties.co/v1/cohort-54/users/me', {
-//   headers: {
-//     authorization: '2ce6c808-d58b-4b11-aa87-9ee20a23a568',
-//     'content-type': 'application/json',
-//   }
-// })
-// .then(res => {
-//   return res.json();
-// })
-// .then((result) => {
-//   console.log(result);
-// });
-
-//////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // пример функции для кнопки сохранения
 // function renderLoading(isLoading) {

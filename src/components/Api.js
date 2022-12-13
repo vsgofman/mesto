@@ -62,11 +62,42 @@ export default class Api {
     }).catch(console.log)
   }
 
-  deleteCard() {
-
+  deleteCard(id) {
+    return fetch(`${this._url}/cards/${id}`, {
+      method: "DELETE",
+      headers: this._headers
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
+      return Promise.reject(`Ошибка: ${res.status}`)
+    })
   }
 
-  deleteCard() {
+  addLike(id) {
+    return fetch(`${this._url}/cards/${id}/likes`, {
+      method: "PUT",
+      headers: this._headers
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
+      return Promise.reject(`Ошибка: ${res.status}`)
+    })
+  }
 
+  deleteLike(id) {
+    return fetch(`${this._url}/cards/${id}/likes`, {
+      method: "DELETE",
+      headers: this._headers
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
+      return Promise.reject(`Ошибка: ${res.status}`)
+    })
   }
 }
