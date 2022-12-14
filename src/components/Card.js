@@ -27,16 +27,10 @@ export default class Card {
     this._element.querySelector('.card__name').textContent = this._title;
     this._cardImage.src = this._photo;
     this._cardImage.alt = this._title;
-    this._cardLike.textContent = this._likes.length;
+    this.setLikes(this._likes);
     if (this._ownerId !== this._userId) {
       this._deleteButton.style.display = 'none';
     }
-
-    const userWhoLikedCard = this._likes.find(user => user._id === this._userId)
-    if (userWhoLikedCard) {
-      this._likeCard()
-    }
-
     return this._element;
   }
 // откорректировать название функции удаления карточки
@@ -58,7 +52,19 @@ export default class Card {
     this._element.remove();
   }
 
-  _likeCard() {
-    this._likeButton.classList.toggle('card__button_active');
+  isLiked() {
+    const userWhoLikedCard = this._likes.find(user => user._id === this._userId)
+    return userWhoLikedCard
+  }
+
+  setLikes(newLikes) {
+    this._likes = newLikes
+    const userWhoLikedCard = this._likes.find(user => user._id === this._userId)
+    if (this.isLiked()) {
+      this._likeButton.classList.add('card__button_active');
+    } else {
+      this._likeButton.classList.remove('card__button_active');
+    }
+    this._cardLike.textContent = this._likes.length;
   }
 }
