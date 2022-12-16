@@ -5,6 +5,7 @@ import Section from '../components/Section.js';
 import Popup from '../components/Popup.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
+import PopupConfirm from '../components/PopupConfirm.js';
 import UserInfo from '../components/UserInfo.js';
 import './index.css';
 
@@ -16,19 +17,13 @@ const buttonPopupEditOpen = document.querySelector('.profile__button_edit');
 const buttonPopupAddOpen = document.querySelector('.profile__button_add');
 const unitPopupAvatarOpen = document.querySelector('.profile__overlay');
 
-const nameProfile = document.querySelector('.profile__name');
-const jobProfile = document.querySelector('.profile__position');
-const formPopupEdit = popupEdit.querySelector('.popup__form_profile_edit');
 const profileNameInput = popupEdit.querySelector('.popup__input_content_name');
 const profileJobInput = popupEdit.querySelector('.popup__input_content_job');
+const formPopupEdit = popupEdit.querySelector('.popup__form_profile_edit');
 const formAdd = popupAdd.querySelector('.popup__form_card_add');
 const formAvatarEdit = popupAvatar.querySelector('.popup__form_avatar_edit');
-let userId = '';
-
-const cardTemplate = document.querySelector('#card-template').content;
 const cardContainerSelector = '.cards';
-
-
+let userId = '';
 
 const apiConfig = {
   url: "https://mesto.nomoreparties.co/v1/cohort-54",
@@ -39,42 +34,37 @@ const apiConfig = {
 }
 
 const api = new Api(apiConfig);
-api.getProfile()
-.then((res) => {
-  userInfo.setUserInfo(res.name, res.about)
-  userInfo.setUserAvatar(res.avatar)
-  userId = res._id
-})
 
-api.getInitialCards()
-.then((result) => {
-  const defaultCardList = new Section({
-    items: result,
-    renderer: (cardItem) => {
-      defaultCardList.addItem(createCard(cardItem));
-    }
-  }, cardContainerSelector)
-  defaultCardList.renderItems()
-})
-.catch((error) => {
-  console.log(error)
-});
+const section = new Section(
+  (cardItem) => {
+    section.addItem(createCard(cardItem))
+  },
+  cardContainerSelector);
 
+Promise.all([
+  api.getProfile(),
+  api.getInitialCards()
+]).then((values) => {
+  userInfo.setUserInfo(values[0].name, values[0].about)
+  userInfo.setUserAvatar(values[0].avatar)
+  userId = values[0]._id
+  section.renderItems(values[1])
+}).catch((err) => console.log(`Данные не загрузились. ${err}`));
 
 // создание карточек
 const createCard = (item) => {
   const card = new Card(
     { data: item, userId: userId },
-    cardTemplate,
+    '#card-template',
     handleCardClick,
     (id) => {
       popupDeleteConfirm.open();
-      popupDeleteConfirm.changePopupCallback(() => {
+      popupDeleteConfirm.setPopupCallback(() => {
         api.deleteCard(id)
         .then((res) => {
           popupDeleteConfirm.close();
           card.deleteCard();
-        })
+      }).catch((err) => console.log(`Карточка не удалилась. ${err}`))
       })
     },
     (id) => {
@@ -83,10 +73,16 @@ const createCard = (item) => {
         .then((res) => {
           card.setLikes(res.likes)
         })
+        .catch((err) => {
+          console.log(`Лайк не удалился. ${err}`)
+        })
       } else {
         api.addLike(id)
         .then((res) => {
           card.setLikes(res.likes)
+        })
+        .catch((err) => {
+          console.log(`Не удалось лайкнуть карточку. ${err}`)
         })
       }
   });
@@ -103,14 +99,12 @@ const popupEditProfile = new PopupWithForm(
   (data) => {
     popupEditProfile.renderLoading(true);
     api.editProfile(data['name-input'], data['job-input'])
-    .then(() => {
-      userInfo.setUserInfo(data['name-input'], data['job-input']);
-    })
-    .catch(err => {
-      console.log('Данные профиля не были обновлены', err)
-    })
-    .finally(() => {
+    .then((res) => {
+      userInfo.setUserInfo(res.name, res.about);
       popupEditProfile.close();
+    })
+    .catch(err => console.log(`Данные профиля не были обновлены. ${err}`))
+    .finally(() => {
       popupEditProfile.renderLoading(false);
     })
 });
@@ -121,21 +115,11 @@ const popupAddCard = new PopupWithForm(
   popupAddCard.renderLoading(true);
   api.addCard(cardData['card-name'], cardData['card-link'])
   .then((res) => {
-    const newCard = new Section({
-      items: [ res ],
-      renderer: (res) => {
-        newCard.addItem(createCard(res))
-      }
-    }, cardContainerSelector);
-    newCard.renderItems()
-  })
-  .catch(err => {
-    console.log('Карточка не добавилась', err)
-  })
-  .finally(() => {
+    section.renderItems(res)
     popupAddCard.close()
-    popupAddCard.renderLoading(false);
   })
+  .catch(err => console.log(`Карточка не добавилась. ${err}`))
+  .finally(() => popupAddCard.renderLoading(false))
 });
 
 const popupEditAvatar = new PopupWithForm(
@@ -143,20 +127,15 @@ const popupEditAvatar = new PopupWithForm(
   (data) => {
     popupEditAvatar.renderLoading(true);
     api.editAvatar(data['avatar-link'])
-    .then(() => {
-      userInfo.setUserAvatar(data['avatar-link']);
-    })
-    .catch(err => {
-      console.log('Не удалось обновить аватар', err)
-    })
-    .finally(() => {
+    .then((res) => {
+      userInfo.setUserAvatar(res.avatar);
       popupEditAvatar.close();
-      popupEditAvatar.renderLoading(false);
     })
+    .catch(err => console.log(`Не удалось обновить аватар. ${err}`))
+    .finally(() => popupEditAvatar.renderLoading(false));
 });
 
-const popupDeleteConfirm = new PopupWithForm('.popup_confirm')
-
+const popupDeleteConfirm = new PopupConfirm('.popup_confirm');
 const popupImage = new PopupWithImage('.popup_cover');
 
 const userInfo = new UserInfo({

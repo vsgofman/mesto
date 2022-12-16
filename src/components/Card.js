@@ -1,12 +1,12 @@
 export default class Card {
-  constructor({ data, userId }, cardTemplate, handleCardClick, handleDeleteClick, likeCardHandler) {
+  constructor({ data, userId }, cardTemplateSelector, handleCardClick, handleDeleteClick, likeCardHandler) {
     this._title = data.name;
     this._photo = data.link;
     this._likes = data.likes;
     this._id = data._id;
     this._ownerId = data.owner._id;
     this._userId = userId;
-    this._cardTemplate = cardTemplate;
+    this._cardTemplate = document.querySelector(cardTemplateSelector).content;
     this._handleCardClick = handleCardClick;
     this._handleDeleteClick = handleDeleteClick;
     this._likeCardHandler = likeCardHandler;
@@ -53,18 +53,15 @@ export default class Card {
   }
 
   isLiked() {
-    const userWhoLikedCard = this._likes.find(user => user._id === this._userId)
-    return userWhoLikedCard
+    if (this._likes.find(user => user._id === this._userId) !== undefined) {
+      return true
+    }
+    return false
   }
 
   setLikes(newLikes) {
-    this._likes = newLikes
-    const userWhoLikedCard = this._likes.find(user => user._id === this._userId)
-    if (this.isLiked()) {
-      this._likeButton.classList.add('card__button_active');
-    } else {
-      this._likeButton.classList.remove('card__button_active');
-    }
+    this._likes = newLikes;
+    this._likeButton.classList.toggle('card__button_active', this.isLiked());
     this._cardLike.textContent = this._likes.length;
   }
 }

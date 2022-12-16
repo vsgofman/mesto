@@ -30,8 +30,5 @@ export default class Popup {
     this._element.addEventListener('click', (evt) => {
       this._closePopupButtonAndOverlay(evt);
     });
-    document.addEventListener('click', (evt) => {
-      this._handleEscClose(evt);
-    });
   }
 }
